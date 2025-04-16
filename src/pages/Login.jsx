@@ -25,26 +25,30 @@ function Login({ onLogin }) {
     };
 
     return (
-        <div className="login-container">
-            <h2>Log in</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    placeholder="E-mailadres"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Wachtwoord"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                {error && <p className="error-message">{error}</p>}
-                <button type="submit">Log in</button>
-            </form>
+        <div className="login-wrapper">
+            <div className="login">
+                <h2 className="centered">Log in</h2>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="email"
+                        placeholder="E-mailadres"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Wachtwoord"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button type="submit">Log in</button>
+                    <p className="centered">Nog geen account?</p>
+                    <button type="button" onClick={() =>
+                    alert('Registratiepagina komt nog')}>
+                        registreren
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
