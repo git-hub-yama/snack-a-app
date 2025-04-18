@@ -1,25 +1,55 @@
-import React from 'react';
+// src/pages/Home.jsx
+import React, { useState } from 'react';
 import './Home.css';
+import { FaSearch } from 'react-icons/fa';
 
-function Home({ userEmail }) {
+function Home({ userEmail }) { const [query, setQuery] = useState(''); const [results, setResults] = useState([]);
+
+    const handleSearch = async () => {
+        if (!query.trim()) return;
+
+        try {
+            const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=5&apiKey=e1a59ee09f5240c99dd3df35ea75e581`);
+            const data = await response.json();
+            setResults(data.results || []);
+        } catch (error) {
+            console.error('Zoeken mislukt:', error);
+            setResults([]);
+        }
+    };
+
     return (
-        <div className="home-wrapper">
-            <header className="home-header">
-                <h2>Hallo, {userEmail}!</h2>
+        <div className="home-container">
+            <div className="top-bar">
+                <h2 className="welcome">Hallo, {userEmail}!</h2>
                 <img
-                    src="https://via.placeholder.com/100"
-                    alt="Profielfoto"
-                    className="profile-pic"
+                    src="https://via.placeholder.com/60"
+                    alt="Avatar"
+                    className="avatar"
                 />
-            </header>
+            </div>
 
-            <input
-                type="text"
-                placeholder="Zoek naar een recept..."
-                className="zoekbalk"
-            />
+            <div className="search-container">
+                <input
+                    type="text"
+                    placeholder="Zoek naar een recept..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+                <button onClick={handleSearch} className="search-btn">
+                    <FaSearch />
+                </button>
+            </div>
 
-            <div className="menu">
+            {results.length > 0 && (
+                <ul className="results">
+                    {results.map((item) => (
+                        <li key={item.id}>{item.title}</li>
+                    ))}
+                </ul>
+            )}
+
+            <div className="button-grid">
                 <button>Favorieten</button>
                 <button>Dieet voorkeur</button>
                 <button>Account bewerken</button>
@@ -27,6 +57,7 @@ function Home({ userEmail }) {
             </div>
         </div>
     );
+
 }
 
 export default Home;
