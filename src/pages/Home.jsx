@@ -36,9 +36,11 @@ function Home({ userEmail }) { const [query, setQuery] = useState(''); const [re
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                <button onClick={handleSearch} className="search-btn">
-                    <FaSearch />
-                </button>
+                {query && (
+                    <button onClick={handleSearch} className="search-btn">
+                        <FaSearch/>
+                    </button>
+                )}
             </div>
 
             {results.length > 0 && (
