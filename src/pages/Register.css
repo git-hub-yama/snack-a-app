@@ -37,19 +37,3 @@ input {
 .green-button:hover {
     background-color: #218838;
 }
-
-.register-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.register {
-    width: 350px;
-    padding: 30px;
-    border: 1px solid #ddd;
-    border-radius: 15px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}

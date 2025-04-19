@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 
-function Login({ onGoToRegister }) {
+function Login({ onGoToRegister, onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -42,6 +42,7 @@ function Login({ onGoToRegister }) {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <button type="submit">Log in</button>
+                    {error && <p className="error">{error}</p>}
                     <p className="centered">Nog geen account?</p>
                     <button type="button" onClick={onGoToRegister}>
                         registreren
