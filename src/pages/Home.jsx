@@ -11,6 +11,7 @@ function Home({ userEmail }) { const [query, setQuery] = useState(''); const [re
         try {
             const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=5&apiKey=e1a59ee09f5240c99dd3df35ea75e581`);
             const data = await response.json();
+            console.log(data);
             setResults(data.results || []);
         } catch (error) {
             console.error('Zoeken mislukt:', error);
