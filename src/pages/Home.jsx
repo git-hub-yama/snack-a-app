@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Home.css';
 import { FaSearch } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 function Home({ userEmail }) {
     const [query, setQuery] = useState('');
@@ -10,7 +11,7 @@ function Home({ userEmail }) {
         if (!query.trim()) return;
         try {
             const response = await fetch(
-                `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=5&apiKey=e1a59ee09f5240c99dd3df35ea75e581`
+                `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=2&apiKey=e1a59ee09f5240c99dd3df35ea75e581`
             );
             const data = await response.json();
             setResults(data.results || []);
@@ -47,7 +48,9 @@ function Home({ userEmail }) {
             {results.length > 0 && (
                 <ul className="results">
                     {results.map((item) => (
-                        <li key={item.id}>{item.title}</li>
+                        <Link to={`/recipe/${item.id}`} key={item.id}>
+                            <li>{item.title}</li>
+                        </Link>
                     ))}
                 </ul>
             )}
