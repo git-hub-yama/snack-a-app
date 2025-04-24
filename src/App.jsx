@@ -1,31 +1,39 @@
+// src/App.jsx
 import { useState } from 'react';
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import Home from './pages/Home.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Home from './pages/Home';
+import Recipe from './pages/Recipe';
 
 function App() {
     const [showRegister, setShowRegister] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState('');
 
-    if (isLoggedIn) {
-        return <Home userEmail={userEmail} />;
-    }
-
     return (
-        <div className="App">
-            {showRegister ? (
-                <Register onGoBack={() => setShowRegister(false)} />
+        <Router>
+            {!isLoggedIn ? (
+                <div className="App">
+                    {showRegister ? (
+                        <Register onGoBack={() => setShowRegister(false)} />
+                    ) : (
+                        <Login
+                            onGoToRegister={() => setShowRegister(true)}
+                            onLogin={(email) => {
+                                setUserEmail(email);
+                                setIsLoggedIn(true);
+                            }}
+                        />
+                    )}
+                </div>
             ) : (
-                <Login
-                    onGoToRegister={() => setShowRegister(true)}
-                    onLogin={(email) => {
-                        setUserEmail(email);
-                        setIsLoggedIn(true);
-                    }}
-                />
+                <Routes>
+                    <Route path="/" element={<Home userEmail={userEmail} />} />
+                    <Route path="/recipe/:id" element={<Recipe />} />
+                </Routes>
             )}
-        </div>
+        </Router>
     );
 }
 
