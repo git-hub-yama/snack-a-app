@@ -11,7 +11,7 @@ function Home({ userEmail }) {
         if (!query.trim()) return;
         try {
             const response = await fetch(
-                `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=2&apiKey=e1a59ee09f5240c99dd3df35ea75e581`
+                `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=2&apiKey=${import.meta.env.VITE_SPOONACULAR_KEY}`
             );
             const data = await response.json();
             setResults(data.results || []);

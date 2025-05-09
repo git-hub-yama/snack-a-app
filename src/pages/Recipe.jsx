@@ -1,4 +1,3 @@
-// src/pages/Recipe.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './Recipe.css';
@@ -11,7 +10,7 @@ function Recipe() {
         const fetchRecipeInfo = async () => {
             try {
                 const response = await fetch(
-                    `https://api.spoonacular.com/recipes/${id}/information?apiKey=e1a59ee09f5240c99dd3df35ea75e581`
+                    `https://api.spoonacular.com/recipes/${id}/information?apiKey=${import.meta.env.VITE_SPOONACULAR_KEY}`
                 );
                 const data = await response.json();
                 setRecipe(data);

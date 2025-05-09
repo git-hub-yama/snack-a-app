@@ -1,12 +1,10 @@
-/* src/pages/Login.css */
-
 .login-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;         /* neemt hele schermhoogte */
-    width: 100vw;          /* neemt hele schermbreedte */
-    background-color: #f0f2f5; /* optioneel, voor wat contrast */
+    height: 100vh;
+    width: 100vw;
+    background-color: #f0f2f5;
 }
 
 .login {
@@ -71,4 +69,3 @@ button[type="button"] {
     border-radius: 5px;
     cursor: pointer;
 }
-
