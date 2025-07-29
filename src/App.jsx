@@ -1,5 +1,5 @@
 import { useAuth } from './context/AuthContext';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -8,11 +8,11 @@ import Favorieten from './pages/Favorieten';
 import { useState } from 'react';
 
 function App() {
-    const { isAuth, user } = useAuth();
+    const { isAuth } = useAuth();
     const [showRegister, setShowRegister] = useState(false);
 
     return (
-        <Router>
+        <>
             {!isAuth ? (
                 <div className="App">
                     {showRegister ? (
@@ -28,7 +28,7 @@ function App() {
                     <Route path="/favorieten" element={<Favorieten />} />
                 </Routes>
             )}
-        </Router>
+        </>
     );
 }
 

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useFavorites } from '../context/FavoritesContext';
 import './Recipe.css';
 
 function Recipe() {
     const { id } = useParams();
     const [recipe, setRecipe] = useState(null);
+    const { favorites, toggleFavorite } = useFavorites();
+
+    // Check of dit recept al in de favorieten zit
+    const isFavorite = favorites.some((fav) => fav.id === parseInt(id));
 
     useEffect(() => {
-        const fetchRecipeInfo = async () => {
+        async function fetchRecipe() {
             try {
                 const response = await fetch(
                     `https://api.spoonacular.com/recipes/${id}/information?apiKey=${import.meta.env.VITE_SPOONACULAR_KEY}`
@@ -15,42 +20,26 @@ function Recipe() {
                 const data = await response.json();
                 setRecipe(data);
             } catch (error) {
-                console.error('Fout bij ophalen receptinfo:', error);
+                console.error('Fout bij ophalen recept:', error);
             }
-        };
+        }
 
-        fetchRecipeInfo();
+        fetchRecipe();
     }, [id]);
 
-    if (!recipe) return <p>Recept wordt geladen...</p>;
+    if (!recipe) {
+        return <p>Bezig met laden...</p>;
+    }
 
     return (
-        <div className="recipe-page">
-            <h1 className="recipe-title">{recipe.title}</h1>
+        <div className="recipe-container">
+            <h2>{recipe.title}</h2>
+            <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+            <p dangerouslySetInnerHTML={{ __html: recipe.summary }} />
 
-            <div className="recipe-top">
-                <img src={recipe.image} alt={recipe.title} className="recipe-image" />
-
-                <div className="ingredients-section">
-                    <h3>Ingrediënten</h3>
-                    <div className="ingredients-columns">
-                        <ul>
-                            {recipe.extendedIngredients?.slice(0, Math.ceil(recipe.extendedIngredients.length / 2)).map((item, index) => (
-                                <li key={index}>{item.original}</li>
-                            ))}
-                        </ul>
-                        <ul>
-                            {recipe.extendedIngredients?.slice(Math.ceil(recipe.extendedIngredients.length / 2)).map((item, index) => (
-                                <li key={index}>{item.original}</li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="recipe-description">
-                        <h3>Beschrijving</h3>
-                        <p dangerouslySetInnerHTML={{ __html: recipe.summary }} />
-                    </div>
-                </div>
-            </div>
+            <button onClick={() => toggleFavorite(recipe)} className="favorite-button">
+                {isFavorite ? 'Verwijderen uit favorieten' : 'Toevoegen aan favorieten'}
+            </button>
         </div>
     );
 }
