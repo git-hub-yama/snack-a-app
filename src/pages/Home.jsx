@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import './Home.css';
 import { FaSearch } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-function Home({ userEmail }) {
+function Home() {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
+    const { logout, user } = useAuth();
+    const navigate = useNavigate();
+
+    function handleLogout() {
+        logout();
+        navigate('/');
+    }
 
     const handleSearch = async () => {
         if (!query.trim()) return;
@@ -23,7 +31,7 @@ function Home({ userEmail }) {
     return (
         <div className="home-wrapper">
             <div className="top-bar">
-                <h2 className="welcome">Hallo, {userEmail}!</h2>
+                <h2 className="welcome">Hallo, {user?.username}!</h2>
                 <img
                     src="https://via.placeholder.com/60"
                     alt="Avatar"
@@ -56,10 +64,10 @@ function Home({ userEmail }) {
             )}
 
             <div className="button-bar">
-                <button>Favorieten</button>
+                <button onClick={() => navigate('/favorieten')}>Favorieten</button>
                 <button>Dieet voorkeur</button>
                 <button>Account bewerken</button>
-                <button>Uitloggen</button>
+                <button onClick={handleLogout}>Uitloggen</button>
             </div>
         </div>
     );

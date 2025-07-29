@@ -1,53 +1,63 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Login.css';
+import { jwtDecode } from 'jwt-decode';
 
-function Login({ onGoToRegister, onLogin }) {
-    const [email, setEmail] = useState('');
+function Login({ onGoToRegister }) {
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        if (!email || !password) {
-            setError('Vul je e-mailadres en wachtwoord in.');
-            return;
-        }
+        try {
+            const response = await axios.post(
+                'https://frontend-educational-backend.herokuapp.com/api/auth/signin',
+                {
+                    username: username,   // belangrijk: geen email!
+                    password: password,
+                }
+            );
 
-        if (password.length < 6) {
-            setError('Wachtwoord moet minimaal 6 tekens bevatten.');
-            return;
+            console.log('Login response:', response.data);
+            const token = response.data.accessToken;
+            const decodedUser = jwtDecode(token);
+            login(token, decodedUser);
+            navigate('/');
+        } catch (error) {
+            console.error('Login mislukt:', error.response?.data || error.message);
+            setError('Inloggen mislukt. Controleer je gegevens.');
         }
-
-        setError('');
-        onLogin(email);
-    };
+    }
 
     return (
-        <div className="login-wrapper">
-            <div className="login">
-                <h2 className="centered">Log in</h2>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="email"
-                        placeholder="E-mailadres"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Wachtwoord"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="submit">Log in</button>
-                    {error && <p className="error">{error}</p>}
-                    <p className="centered">Nog geen account?</p>
-                    <button type="button" onClick={onGoToRegister}>
-                        registreren
-                    </button>
-                </form>
-            </div>
+        <div className="login-container">
+            <h2>Log in</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="Gebruikersnaam"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Wachtwoord"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <button type="submit">Log in</button>
+                {error && <p style={{color: 'red'}}>{error}</p>}
+            </form>
+            <p>Nog geen account?</p>
+            <button onClick={onGoToRegister}>Registreren</button>
         </div>
     );
 }
