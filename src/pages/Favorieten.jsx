@@ -1,41 +1,47 @@
-import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
-import "./Favorieten.css";
+import React, { useState } from 'react';
+import { useFavorites } from '../context/FavoritesContext';
+import './Favorieten.css';
 
 function Favorieten() {
-    const [search, setSearch] = useState("");
-    const [favorites] = useState([
-        { id: 1, title: "Pasta Bolognese", img: "https://via.placeholder.com/80" },
-        { id: 2, title: "Vegetarische Curry", img: "https://via.placeholder.com/80" },
-        { id: 3, title: "Zalm Teriyaki", img: "https://via.placeholder.com/80" },
-    ]);
+    const { favorites, removeFavorite } = useFavorites();
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredFavorites = favorites.filter((item) =>
-        item.title.toLowerCase().includes(search.toLowerCase())
+    const filteredFavorites = favorites.filter((recipe) =>
+        recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
-        <div className="favorieten-container">
-            <h2>Favorieten</h2>
-            <div className="search-bar">
-                <FaSearch className="search-icon" />
+        <main className="favorieten-wrapper">
+            <div className="favorieten-container">
+                <h2>Favorieten</h2>
+
                 <input
                     type="text"
-                    placeholder="Zoek in favorieten..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="🔍 Zoek in favorieten"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="zoekbalk"
                 />
-            </div>
 
-            <div className="favorites-list">
-                {filteredFavorites.map((item) => (
-                    <div className="favorite-item" key={item.id}>
-                        <img src={item.img} alt={item.title} />
-                        <p>{item.title}</p>
-                    </div>
-                ))}
+                {filteredFavorites.length === 0 ? (
+                    <p>Geen resultaten gevonden.</p>
+                ) : (
+                    <ul className="favorieten-lijst">
+                        {filteredFavorites.map((recipe) => (
+                            <li key={recipe.id} className="favoriet-item">
+                                <span>{recipe.title}</span>
+                                <button
+                                    onClick={() => removeFavorite(recipe.id)}
+                                    className="verwijder-knop"
+                                >
+                                    ❌
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
-        </div>
+        </main>
     );
 }
 
