@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import { FaSearch } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,6 +9,14 @@ function Home() {
     const [results, setResults] = useState([]);
     const { logout, user } = useAuth();
     const navigate = useNavigate();
+    const [avatarUrl, setAvatarUrl] = useState('');
+
+    useEffect(() => {
+        const savedPhoto = localStorage.getItem('profilePhoto');
+        if (savedPhoto) {
+            setAvatarUrl(savedPhoto);
+        }
+    }, []);
 
     function handleLogout() {
         logout();
@@ -18,8 +26,9 @@ function Home() {
     const handleSearch = async () => {
         if (!query.trim()) return;
         try {
+            const selectedDiet = localStorage.getItem('dieetvoorkeur');
             const response = await fetch(
-                `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=2&apiKey=${import.meta.env.VITE_SPOONACULAR_KEY}`
+                `https://api.spoonacular.com/recipes/complexSearch?query=${query}&diet=${selectedDiet}&number=5&apiKey=${import.meta.env.VITE_SPOONACULAR_KEY}`
             );
             const data = await response.json();
             setResults(data.results || []);
@@ -31,9 +40,9 @@ function Home() {
     return (
         <div className="home-wrapper">
             <div className="top-bar">
-                <h2 className="welcome">Hallo, {user?.username}!</h2>
+                <h2 className="welcome">Hallo, {user?.username || localStorage.getItem('username')}!</h2>
                 <img
-                    src="https://via.placeholder.com/60"
+                    src={avatarUrl || 'https://via.placeholder.com/60'}
                     alt="Avatar"
                     className="avatar"
                 />
@@ -65,8 +74,8 @@ function Home() {
 
             <div className="button-bar">
                 <button onClick={() => navigate('/favorieten')}>Favorieten</button>
-                <button>Dieet voorkeur</button>
-                <button>Account bewerken</button>
+                <button onClick={() => navigate('/dieetvoorkeur')}>Dieet voorkeur</button>
+                <button onClick={() => navigate('/account')}>Account bewerken</button>
                 <button onClick={handleLogout}>Uitloggen</button>
             </div>
         </div>

@@ -71,7 +71,6 @@ function Register({ onGoBack }) {
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                 </form>
             )}
-            <button onClick={onGoBack}>Terug naar login</button>
         </div>
     );
 }

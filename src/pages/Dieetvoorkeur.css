@@ -1,0 +1,38 @@
+.dieetvoorkeur-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dieet-lijst {
+    list-style: none;
+    padding: 0;
+}
+
+.dieet-item {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    background-color: #eee;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.dieet-item.actief {
+    background-color: #c4f4c4;
+}
+
+button {
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
