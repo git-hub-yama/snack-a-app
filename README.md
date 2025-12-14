@@ -48,4 +48,4 @@ Voorbeelden van gebruikte components:
 - **RecipeHeader** – toont titel, afbeelding en beschrijving van een recept
 
 Deze components worden hergebruikt in meerdere pagina’s binnen de applicatie,
-zoals Home, Favorieten, Dieetvoorkeur en Recipe.
+zoals Home, Favorieten, Dieetvoorkeur en Recipe. 
