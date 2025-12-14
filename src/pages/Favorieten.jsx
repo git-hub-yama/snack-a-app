@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFavorites } from '../context/FavoritesContext';
 import './Favorieten.css';
+import FavoriteList from '../components/FavoriteList';
 
 function Favorieten() {
     const { favorites, removeFavorite } = useFavorites();
@@ -17,29 +18,16 @@ function Favorieten() {
 
                 <input
                     type="text"
-                    placeholder="🔍 Zoek in favorieten"
+                    placeholder="Zoek in favorieten"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="zoekbalk"
                 />
 
-                {filteredFavorites.length === 0 ? (
-                    <p>Geen resultaten gevonden.</p>
-                ) : (
-                    <ul className="favorieten-lijst">
-                        {filteredFavorites.map((recipe) => (
-                            <li key={recipe.id} className="favoriet-item">
-                                <span>{recipe.title}</span>
-                                <button
-                                    onClick={() => removeFavorite(recipe.id)}
-                                    className="verwijder-knop"
-                                >
-                                    ❌
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <FavoriteList
+                    items={filteredFavorites}
+                    onRemove={removeFavorite}
+                />
             </div>
         </main>
     );

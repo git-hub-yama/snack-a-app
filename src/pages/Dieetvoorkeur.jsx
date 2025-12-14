@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Dieetvoorkeur.css';
 import { useNavigate } from 'react-router-dom';
+import DietList from '../components/DietList';
 
 const dieetOpties = [
     { naam: 'vegetarian', uitleg: 'Geen vlees of vis' },
@@ -16,29 +17,26 @@ const dieetOpties = [
 
 function Dieetvoorkeur() {
     const navigate = useNavigate();
-    const [geselecteerd, setGeselecteerd] = useState(localStorage.getItem('dieetvoorkeur') || '');
+    const [geselecteerd, setGeselecteerd] = useState(
+        localStorage.getItem('dieetvoorkeur') || ''
+    );
 
-    const toggleVoorkeur = (dieet) => {
-        const nieuweVoorkeur = geselecteerd === dieet ? '' : dieet;
-        setGeselecteerd(nieuweVoorkeur);
-        localStorage.setItem('dieetvoorkeur', nieuweVoorkeur);
-    };
+    function toggleVoorkeur(dieet) {
+        const nieuwe = geselecteerd === dieet ? '' : dieet;
+        setGeselecteerd(nieuwe);
+        localStorage.setItem('dieetvoorkeur', nieuwe);
+    }
 
     return (
         <div className="dieetvoorkeur-wrapper">
             <h2>Wat is je dieetvoorkeur?</h2>
-            <ul className="dieet-lijst">
-                {dieetOpties.map((optie) => (
-                    <li
-                        key={optie.naam}
-                        title={optie.uitleg}
-                        className={`dieet-item ${geselecteerd === optie.naam ? 'actief' : ''}`}
-                        onClick={() => toggleVoorkeur(optie.naam)}
-                    >
-                        {geselecteerd === optie.naam ? '❌' : '⬜'} {optie.naam}
-                    </li>
-                ))}
-            </ul>
+
+            <DietList
+                options={dieetOpties}
+                selected={geselecteerd}
+                onToggle={toggleVoorkeur}
+            />
+
             <button onClick={() => navigate('/')}>Terug naar home</button>
         </div>
     );
